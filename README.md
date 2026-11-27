@@ -58,7 +58,7 @@ so it never depends on a developer machine.
 <!-- ts-audit:start -->
 ## TypeScript audit
 
-📅 **Status as of 2026-11-27 18:25 UTC** · commit `8bb74731ec6a07abdaccd92ab3ce79f0e1def21e` · 📄 [full report](docs/audits/ts-audit-2026-11-27T18-25-10.md)
+📅 **Status as of 2026-11-27 18:38 UTC** · commit `0a67fa4734cb7f52887bfa4257f35a6549deb4a5` · 📄 [full report](docs/audits/ts-audit-2026-11-27T18-38-02.md)
 
 ### Summary
 
