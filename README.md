@@ -32,17 +32,17 @@ they are kept only as CI artifacts (90-day retention).
 
 ## CI
 
-`.github/workflows/audit.yml` runs weekly (Monday 06:00 UTC), on every push, and on demand (`workflow_dispatch`).
+`.github/workflows/weekly-audit.yml` runs weekly (Monday 06:00 UTC), on every push, and on demand (`workflow_dispatch`).
 Artifacts (full JSON output) are uploaded for 90 days; the sanitized dated reports, `report.md` and `last-5-reports.md`
 are committed back on push runs.
 
 > ⚠️ The report is published in a public repo. Findings (rule IDs, file paths) are fine;
 > any actual secret values are redacted by gitleaks and must never be committed manually.
 
-## TypeScript audit (ts-audit)
+## TypeScript audit (daily-audit)
 
-`.github/workflows/ts-audit.yml` runs **daily at 05:00 CET** (06:00 during DST — GitHub cron is
-UTC-only) and on demand. Unlike `audit.yml` (weekly, secrets/SAST/deps/hygiene), `ts-audit` is a
+`.github/workflows/daily-audit.yml` runs **daily at 05:00 CET** (06:00 during DST — GitHub cron is
+UTC-only) and on demand. Unlike `weekly-audit.yml` (weekly, secrets/SAST/deps/hygiene), `daily-audit` is a
 deep, type-aware **TypeScript quality audit** (security + efficiency) of pi-fleet-kit's extensions:
 typescript-eslint strict type-checked, `eslint-plugin-security`, `eslint-plugin-regexp` (ReDoS),
 `eslint-plugin-sonarjs`. The job clones the pi-fleet-kit tree fresh on every run (`AUDIT_ROOT`),

@@ -1,4 +1,4 @@
-name: ts-audit
+name: daily-audit
 
 on:
   schedule:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: ts-audit
+  group: daily-audit
   cancel-in-progress: false
 
 jobs:
@@ -56,8 +56,8 @@ jobs:
             echo "No report changes since last run — nothing to commit."
             exit 0
           fi
-          git commit -m "ts-audit: daily report $(date -u +%F) [skip ci]"
-          # Another workflow (audit.yml on push) may commit in the same second —
+          git commit -m "daily-audit: daily report $(date -u +%F) [skip ci]"
+          # Another workflow (weekly-audit on push) may commit in the same second —
           # rebase onto it and retry the push a few times before giving up.
           for attempt in 1 2 3; do
             git pull --rebase --autostash origin main || true
