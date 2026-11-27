@@ -112,8 +112,12 @@ function findingsSection(results, label, root) {
  * Rule-frequency totals across both scopes, as one table with a column per
  * scope. Ordered by FUNCTIONAL-code frequency descending (tie-break: tests
  * frequency, then rule name) — the functional signal leads the ranking.
+ *
+ * @param scopes {{functional: Array, tests: Array}}
+ * @param heading {"##" | "###"} — section level: "##" in the full report,
+ *   "###" inside the job summary (where scope metrics are already "##").
  */
-function ruleTotalsTable(scopes) {
+export function ruleTotalsTable(scopes, heading) {
 	const counts = new Map(); // rule → { functional, tests }
 	for (const { key, label } of SCOPES) {
 		for (const { rule, count } of summarize(scopes[key]).rules) {
@@ -127,7 +131,7 @@ function ruleTotalsTable(scopes) {
 		.map(([rule, c]) => ({ rule, ...c }))
 		.sort((a, b) => b.functional - a.functional || b.tests - a.tests || a.rule.localeCompare(b.rule));
 	return [
-		"### Totals per rule",
+		`${heading} Totals per rule`,
 		"",
 		"| Rule | Functional code | Tests |",
 		"|---|---|---|",
@@ -158,7 +162,7 @@ export function toJobSummary(scopes, meta) {
 		lines.push(`### ${label}`, "", ...rows, "");
 		if (s.errors === 0 && s.warnings === 0) lines.push("✅ **No findings.**", "");
 	}
-	const totals = ruleTotalsTable(scopes);
+	const totals = ruleTotalsTable(scopes, "###");
 	if (totals) lines.push(...totals, "");
 	else lines.push("_No rule totals — nothing to report._", "");
 	lines.push("Archives: `docs/audits/` — one Markdown report per run (name = date + hh-mm-ss).");
@@ -191,6 +195,9 @@ export function toMarkdownScopes(scopes, meta) {
 		const { s } = scopeSummaryTable(scopes[key]);
 		parts.push(`| ${label} | ${s.errors} | ${s.warnings} | ${s.files} | ${s.filesWithFindings} | ${s.rules.length} |`);
 	}
+	// Rule totals lead the findings sections — same table as the job summary.
+	const totals = ruleTotalsTable(scopes, "##");
+	if (totals) parts.push(...totals, "");
 	for (const { key, label } of SCOPES) {
 		parts.push(
 			...findingsSection(scopes[key], label, meta.root),

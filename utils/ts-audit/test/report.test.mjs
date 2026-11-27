@@ -97,6 +97,13 @@ test("toMarkdownScopes: combined summary row per scope + findings sections", () 
 	assert.match(md, /\| Scope \| Errors \| Warnings \| Files scanned \| Files with findings \| Rules triggered \|/);
 	assert.match(md, /\| Functional code \| 1 \| 0 \| 1 \| 1 \| 1 \|/);
 	assert.match(md, /\| Tests \| 0 \| 1 \| 1 \| 1 \| 1 \|/);
+	assert.match(md, /## Totals per rule/);
+	assert.match(md, /\| Rule \| Functional code \| Tests \|/);
+	assert.match(md, /\| `r-a` \| 1 \| 0 \|/);
+	assert.match(md, /\| `r-b` \| 0 \| 1 \|/);
+	const iA = md.indexOf("| `r-a` |");
+	const iB = md.indexOf("| `r-b` |");
+	assert.ok(iA !== -1 && iB !== -1 && iA < iB, "functional frequency leads the ranking");
 	assert.match(md, /## Findings — Functional code/);
 	assert.match(md, /## Findings — Tests/);
 	assert.match(md, /## Top rules — Functional code/);
