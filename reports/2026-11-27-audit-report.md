@@ -1,6 +1,6 @@
-# Audit report — pi-fleet-kit @ 57cd242
+# Audit report — pi-fleet-kit @ 8bb7473
 
-Generated: 2026-11-27 18:15 UTC by [pi-fleet-kit-audit](https://github.com/didier-durand/pi-fleet-kit-audit)
+Generated: 2026-11-27 18:25 UTC by [pi-fleet-kit-audit](https://github.com/didier-durand/pi-fleet-kit-audit)
 
 | Check | Tool | Status | Summary |
 |---|---|---|---|
