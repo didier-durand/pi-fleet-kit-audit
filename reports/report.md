@@ -1,12 +1,12 @@
-# Audit report — pi-fleet-kit @ 3ad7741
+# Audit report — pi-fleet-kit @ 19ed98f
 
-Generated: 2026-11-27 06:05 UTC by [pi-fleet-kit-audit](https://github.com/didier-durand/pi-fleet-kit-audit)
+Generated: 2026-11-27 06:07 UTC by [pi-fleet-kit-audit](https://github.com/didier-durand/pi-fleet-kit-audit)
 
 | Check | Tool | Status | Summary |
 |---|---|---|---|
 | Secrets | gitleaks | ⚠️ WARN | 5 finding(s), all in test fixtures (likely fake data) — details in artifacts only |
-| SAST | semgrep | ⏭️ SKIPPED | semgrep not installed |
-| SAST (rules) | eslint-plugin-security | ❌ FAIL | 62 finding(s) in source code (+193 in tests) — see eslint-summary.md |
+| SAST | semgrep | ✅ PASS | no semgrep findings |
+| SAST (rules) | eslint-plugin-security | ❌ FAIL | 62 finding(s) in source code (+232 in tests) — see eslint-summary.md |
 | Dependencies | npm audit | ⚠️ WARN | 4 of 4 package dir(s) lack a committed lockfile — see npm-audit.md |
 | Hygiene | script | ❌ FAIL | see hygiene.md below |
 
@@ -21,7 +21,7 @@ Generated: 2026-11-27 06:05 UTC by [pi-fleet-kit-audit](https://github.com/didie
 
 | Rule | src | tests |
 |---|---|---|
-| security/detect-non-literal-fs-filename | 41 | 160 |
+| security/detect-non-literal-fs-filename | 41 | 199 |
 | security/detect-non-literal-regexp | 0 | 5 |
 | security/detect-object-injection | 14 | 27 |
 | security/detect-possible-timing-attacks | 4 | 0 |
@@ -80,22 +80,22 @@ Generated: 2026-11-27 06:05 UTC by [pi-fleet-kit-audit](https://github.com/didie
 - extensions/prompt-trigger/prompt-trigger.ts (line 141): security/detect-object-injection — Function Call Object Injection Sink
 - extensions/prompt-trigger/prompt-trigger.ts (line 150): security/detect-non-literal-fs-filename — Found readdirSync from package "node:fs" with non literal argument at index 0
 - extensions/prompt-trigger/prompt-trigger.ts (line 180): security/detect-object-injection — Generic Object Injection Sink
-- extensions/prompt-trigger/prompt-trigger.ts (line 193): security/detect-non-literal-fs-filename — Found existsSync from package "node:fs" with non literal argument at index 0
-- extensions/prompt-trigger/prompt-trigger.ts (line 196): security/detect-non-literal-fs-filename — Found writeFileSync from package "node:fs" with non literal argument at index 0
-- extensions/prompt-trigger/prompt-trigger.ts (line 197): security/detect-non-literal-fs-filename — Found renameSync from package "node:fs" with non literal argument at index 0,1
-- extensions/prompt-trigger/prompt-trigger.ts (line 200): security/detect-non-literal-fs-filename — Found unlinkSync from package "node:fs" with non literal argument at index 0
-- extensions/prompt-trigger/prompt-trigger.ts (line 241): security/detect-non-literal-fs-filename — Found writeFileSync from package "node:fs" with non literal argument at index 0
-- extensions/prompt-trigger/prompt-trigger.ts (line 298): security/detect-non-literal-fs-filename — Found readdirSync from package "node:fs" with non literal argument at index 0
-- extensions/prompt-trigger/prompt-trigger.ts (line 326): security/detect-non-literal-fs-filename — Found readFileSync from package "node:fs" with non literal argument at index 0
-- extensions/prompt-trigger/prompt-trigger.ts (line 341): security/detect-non-literal-fs-filename — Found readFileSync from package "node:fs" with non literal argument at index 0
-- extensions/prompt-trigger/prompt-trigger.ts (line 382): security/detect-non-literal-fs-filename — Found unlinkSync from package "node:fs" with non literal argument at index 0
-- extensions/prompt-trigger/prompt-trigger.ts (line 398): security/detect-non-literal-fs-filename — Found readdirSync from package "node:fs" with non literal argument at index 0
-- extensions/prompt-trigger/prompt-trigger.ts (line 412): security/detect-non-literal-fs-filename — Found statSync from package "node:fs" with non literal argument at index 0
+- extensions/prompt-trigger/prompt-trigger.ts (line 203): security/detect-non-literal-fs-filename — Found existsSync from package "node:fs" with non literal argument at index 0
+- extensions/prompt-trigger/prompt-trigger.ts (line 206): security/detect-non-literal-fs-filename — Found writeFileSync from package "node:fs" with non literal argument at index 0
+- extensions/prompt-trigger/prompt-trigger.ts (line 207): security/detect-non-literal-fs-filename — Found renameSync from package "node:fs" with non literal argument at index 0,1
+- extensions/prompt-trigger/prompt-trigger.ts (line 210): security/detect-non-literal-fs-filename — Found unlinkSync from package "node:fs" with non literal argument at index 0
+- extensions/prompt-trigger/prompt-trigger.ts (line 251): security/detect-non-literal-fs-filename — Found writeFileSync from package "node:fs" with non literal argument at index 0
+- extensions/prompt-trigger/prompt-trigger.ts (line 309): security/detect-non-literal-fs-filename — Found readdirSync from package "node:fs" with non literal argument at index 0
+- extensions/prompt-trigger/prompt-trigger.ts (line 337): security/detect-non-literal-fs-filename — Found readFileSync from package "node:fs" with non literal argument at index 0
+- extensions/prompt-trigger/prompt-trigger.ts (line 352): security/detect-non-literal-fs-filename — Found readFileSync from package "node:fs" with non literal argument at index 0
+- extensions/prompt-trigger/prompt-trigger.ts (line 393): security/detect-non-literal-fs-filename — Found unlinkSync from package "node:fs" with non literal argument at index 0
+- extensions/prompt-trigger/prompt-trigger.ts (line 409): security/detect-non-literal-fs-filename — Found readdirSync from package "node:fs" with non literal argument at index 0
+- extensions/prompt-trigger/prompt-trigger.ts (line 423): security/detect-non-literal-fs-filename — Found statSync from package "node:fs" with non literal argument at index 0
 </details>
 
 ## Dependency audit
 
 - [.](<.>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
-- [./extensions/prompt-trigger](<./extensions/prompt-trigger>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
 - [./extensions/git-status](<./extensions/git-status>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
 - [./extensions/pi-obs](<./extensions/pi-obs>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
+- [./extensions/prompt-trigger](<./extensions/prompt-trigger>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
