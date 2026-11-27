@@ -23,6 +23,7 @@ OUT_DIR="${2:-reports}"
 WORK_DIR="$(mktemp -d)"
 trap 'rm -rf "$WORK_DIR"' EXIT
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DATE="$(date -u '+%Y-%m-%d %H:%M UTC')"
 TARGET_NAME="$(basename "$TARGET_URL" .git)"
 
@@ -254,6 +255,13 @@ $(cat "$OUT_DIR/npm-audit.md")" )
 EOF
 
 log "Report written to $REPORT"
+
+# Dated daily report + rolling last-5 summary
+DATED_REPORT="$OUT_DIR/$(date -u +%Y-%m-%d)-audit-report.md"
+cp "$REPORT" "$DATED_REPORT"
+log "Dated report written to $DATED_REPORT"
+node "$SCRIPT_DIR/summarize-reports.cjs" "$OUT_DIR"
+
 log "Done. Statuses: secrets=$GL_STATUS sast=$SG_STATUS eslint=$ES_STATUS deps=$NA_STATUS hygiene=$HY_STATUS"
 
 # Fail CI if any hard check failed (skipped/warned tools don't fail the run)
