@@ -1,0 +1,5 @@
+# Raw scan outputs may contain secret snippets — keep them as CI artifacts only
+reports/*
+!reports/report.md
+
+node_modules/
