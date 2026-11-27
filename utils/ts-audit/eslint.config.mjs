@@ -22,10 +22,9 @@ import tseslint from "typescript-eslint";
 export default tseslint.config(
 	{
 		files: ["extensions/**/*.ts"],
-		// The audit targets shipped extension code; unit tests are excluded to
-		// keep the daily report focused (test-only idioms like unawaited asserts
-		// would otherwise dominate the findings).
-		ignores: ["**/tests/**", "**/*.test.ts"],
+		// Both scopes are linted in ONE pass; test files are split out of the
+		// functional findings in code (lib/report.mjs splitByScope) and get
+		// their own tables in the report and job summary.
 		extends: [
 			tseslint.configs.strictTypeChecked,
 			security.configs.recommended,

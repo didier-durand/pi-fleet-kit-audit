@@ -25,7 +25,7 @@ import path from "node:path";
 import { ESLint } from "eslint";
 
 import { archiveStamp } from "./lib/archive-stamp.mjs";
-import { summarize, toJobSummary } from "./lib/report.mjs";
+import { splitByScope, summarize, toJobSummary, toMarkdownScopes } from "./lib/report.mjs";
 import { spliceAuditSection } from "./lib/readme.mjs";
 
 const HOME_ROOT = path.resolve(import.meta.dirname, "../..");
@@ -86,8 +86,13 @@ async function main() {
 		root: TARGET_ROOT,
 	};
 
+	// One lint pass, two scopes: shipped code vs test files, reported with
+	// separate tables/columns each.
+	const scopes = splitByScope(results);
+
 	// The report is produced by the json-to-md ESLint formatter — the same
-	// module `eslint --format json-to-md` would load.
+	// module `eslint --format json-to-md` would load. ESLint's wrapper only
+	// accepts a flat results array; the formatter does the scope split itself.
 	const formatter = await eslint.loadFormatter(FORMATTER);
 	const md = formatter.format(results, meta);
 
@@ -117,13 +122,18 @@ async function main() {
 	if (process.env.GITHUB_STEP_SUMMARY) {
 		fs.appendFileSync(
 			process.env.GITHUB_STEP_SUMMARY,
-			`${toJobSummary(results, meta)}\n\nArchive: \`${path.relative(HOME_ROOT, archive)}\`.\n`,
+			`${toJobSummary(scopes, meta)}\n\nArchive: \`${path.relative(HOME_ROOT, archive)}\`.\n`,
 			"utf8",
 		);
 	}
 
-	const s = summarize(results);
-	console.log(`Audit complete: ${s.errors} errors, ${s.warnings} warnings across ${s.files} files.`);
+	for (const { key, label } of [
+		{ key: "functional", label: "functional code" },
+		{ key: "tests", label: "tests" },
+	]) {
+		const s = summarize(scopes[key]);
+		console.log(`${label}: ${s.errors} errors, ${s.warnings} warnings across ${s.files} files.`);
+	}
 	console.log(
 		`Archive: ${path.relative(HOME_ROOT, archive)}` +
 			(updated !== readme ? " · README section updated" : " · README unchanged"),

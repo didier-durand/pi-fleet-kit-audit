@@ -1,5 +1,8 @@
 /**
- * ESLint custom formatter: JSON-shaped lint results → Markdown report.
+ * ESLint custom formatter: lint results → Markdown report.
+ *
+ * `results` is the scope-split object from lib/report.mjs splitByScope():
+ * { functional: [...], tests: [...] } — rendered with toMarkdownScopes.
  *
  * Named `json-to-md` so it slots into the standard ESLint formatter
  * mechanism: `eslint --format json-to-md` (via node_modules/eslint-formatter-*)
@@ -14,10 +17,13 @@
  * context argument; when absent (plain `eslint --format json-to-md` CLI
  * usage) it falls back to the wall clock / GIT_SHA env / "(unknown)".
  */
-import { toMarkdown } from "../lib/report.mjs";
+import { splitByScope, toMarkdownScopes } from "../lib/report.mjs";
 
 export function format(results, context = {}) {
-	return toMarkdown(results, {
+	// ESLint's formatter contract passes a flat results array (CLI usage):
+	// split into scopes here. audit.mjs may also pass a pre-split object.
+	const scopes = Array.isArray(results) ? splitByScope(results) : results;
+	return toMarkdownScopes(scopes, {
 		generatedAt: context.generatedAt ?? new Date().toISOString(),
 		commit: context.commit ?? process.env.GIT_SHA ?? "(unknown)",
 		eslintVersion: context.eslintVersion ?? "(unknown)",

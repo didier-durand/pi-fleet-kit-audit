@@ -13,12 +13,20 @@ const META = {
 	eslintVersion: "10.15.0",
 };
 
-const RESULTS = [
-	{
-		filePath: "/repo/extensions/a.ts",
-		messages: [{ ruleId: "r-a", severity: 2, line: 3, column: 1, message: "bad" }],
-	},
-];
+const RESULTS = {
+	functional: [
+		{
+			filePath: "/repo/extensions/a.ts",
+			messages: [{ ruleId: "r-a", severity: 2, line: 3, column: 1, message: "bad" }],
+		},
+	],
+	tests: [
+		{
+			filePath: "/repo/extensions/a.test.ts",
+			messages: [{ ruleId: "r-b", severity: 1, line: 7, column: 2, message: "meh" }],
+		},
+	],
+};
 
 test("json-to-md formatter: renders full report from results + injected meta", () => {
 	const md = jsonToMd(RESULTS, { cwd: "/repo", ...META });
@@ -27,7 +35,8 @@ test("json-to-md formatter: renders full report from results + injected meta", (
 	assert.match(md, /commit: `abc1234`/);
 	assert.match(md, /eslint: 10\.15\.0/);
 	assert.match(md, /### extensions\/a\.ts/);
-	assert.match(md, /\| Errors \| 1 \|/);
+	assert.match(md, /\| Functional code \| 1 \| 0 \|/);
+	assert.match(md, /\| Tests \| 0 \| 1 \|/);
 });
 
 test("json-to-md formatter: falls back to env and clock without injected meta", () => {
@@ -43,17 +52,27 @@ test("json-to-md formatter: default export is the bare format fn (ESLint contrac
 	assert.equal(defaultFormat, jsonToMd, "default and named export are the same function");
 });
 
-test("toJobSummary: compact — has tables, no per-file findings", () => {
+test("toJobSummary: one section per scope with its own table and top rules", () => {
 	const s = toJobSummary(RESULTS, META);
 	assert.match(s, /## TypeScript audit — security & efficiency/);
-	assert.match(s, /\| Errors \| 1 \|/);
+	assert.match(s, /### Functional code/);
+	assert.match(s, /### Tests/);
+	assert.match(s, /\| Errors \| 1 \|/); // functional table
+	assert.match(s, /\| Warnings \| 1 \|/); // tests table
+	assert.match(s, /\*\*Top rules — functional code\*\*/);
 	assert.match(s, /- `r-a`: 1/);
+	assert.match(s, /- `r-b`: 1/);
 	assert.doesNotMatch(s, /## Findings/);
 	assert.match(s, /docs\/audits\//);
 	assert.doesNotMatch(s, /ts-audit\.md/, "no canonical-latest file — archives only");
 });
 
-test("toJobSummary: clean state shows explicit no-findings line", () => {
-	const s = toJobSummary([{ filePath: "/repo/a.ts", messages: [] }], META);
-	assert.match(s, /No findings/);
+test("toJobSummary: clean scopes show explicit no-findings lines", () => {
+	const s = toJobSummary(
+		{ functional: [{ filePath: "/repo/a.ts", messages: [] }], tests: [] },
+		META,
+	);
+	const sections = s.split("### ").slice(1);
+	assert.equal(sections.length, 2, "two scope sections");
+	for (const section of sections) assert.match(section, /No findings/);
 });

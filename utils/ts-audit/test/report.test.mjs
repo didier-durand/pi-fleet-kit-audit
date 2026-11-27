@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { summarize, toMarkdown } from "../lib/report.mjs";
+import { splitByScope, summarize, toMarkdown, toMarkdownScopes } from "../lib/report.mjs";
 
 const ROOT = "/repo";
 const META = {
@@ -69,6 +69,45 @@ test("toMarkdown: findings grouped per file, sorted by position, table-safe", ()
 	assert.match(md, /bad \\\| pipe/, "pipe escaped for table safety");
 	assert.match(md, /\| error \|/);
 	assert.match(md, /\| warning \|/);
+});
+
+test("splitByScope: tests/ dirs and *.test.ts separate from functional code", () => {
+	const { functional, tests } = splitByScope([
+		result("src/index.ts", []),
+		result("src/model.test.ts", []),
+		result("tests/unit/cli.test.ts", []),
+		result("tests/harness.ts", []),
+		result("git-status.ts", []),
+	]);
+	assert.deepEqual(functional.map((r) => r.filePath), [`${ROOT}/src/index.ts`, `${ROOT}/git-status.ts`]);
+	// filter preserves input order:
+	assert.deepEqual(tests.map((r) => r.filePath), [
+		`${ROOT}/src/model.test.ts`,
+		`${ROOT}/tests/unit/cli.test.ts`,
+		`${ROOT}/tests/harness.ts`,
+	]);
+});
+
+test("toMarkdownScopes: combined summary row per scope + findings sections", () => {
+	const scopes = splitByScope([
+		result("src/index.ts", [{ ruleId: "r-a", severity: 2, line: 1, column: 1, message: "x" }]),
+		result("src/index.test.ts", [{ ruleId: "r-b", severity: 1, line: 2, column: 1, message: "y" }]),
+	]);
+	const md = toMarkdownScopes(scopes, META);
+	assert.match(md, /\| Scope \| Errors \| Warnings \| Files scanned \| Files with findings \| Rules triggered \|/);
+	assert.match(md, /\| Functional code \| 1 \| 0 \| 1 \| 1 \| 1 \|/);
+	assert.match(md, /\| Tests \| 0 \| 1 \| 1 \| 1 \| 1 \|/);
+	assert.match(md, /## Findings — Functional code/);
+	assert.match(md, /## Findings — Tests/);
+	assert.match(md, /## Top rules — Functional code/);
+	assert.match(md, /## Top rules — Tests/);
+	assert.doesNotMatch(md, /### src\/index\.test\.ts[\s\S]*### Functional/, "test findings stay in their own section");
+});
+
+test("toMarkdownScopes: clean scopes render explicit no-findings", () => {
+	const md = toMarkdownScopes({ functional: [result("a.ts", [])], tests: [] }, META);
+	assert.match(md, /## Findings — Functional code\n\n✅ \*\*No findings\.\*\*/);
+	assert.match(md, /## Findings — Tests\n\n✅ \*\*No findings\.\*\*/);
 });
 
 test("toMarkdown: relative paths, no absolute leakage", () => {

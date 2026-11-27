@@ -58,7 +58,7 @@ so it never depends on a developer machine.
 <!-- ts-audit:start -->
 ## TypeScript audit
 
-Errors 118 · Warnings 62 · Files scanned 18 · Rules triggered 30
+
 
 Archives: [docs/audits/](docs/audits/) — one file per run (name = date + hh-mm-ss), refreshed daily at 05:00 by the `ts-audit` workflow.
 <!-- ts-audit:end -->
