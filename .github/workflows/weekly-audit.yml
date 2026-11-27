@@ -45,6 +45,36 @@ jobs:
           path: reports/
           retention-days: 90
 
+      # Commit the sanitized Markdown report next to the daily archives —
+      # same convention (name = weekly-audit + UTC date and time to the
+      # second). Raw JSONs stay artifact-only: they may contain secret
+      # snippets; report.md holds statuses, rule IDs and file paths only.
+      - name: Commit report to audits/weekly-audits
+        run: |
+          STAMP=$(date -u +%Y-%m-%dT%H-%M-%S)
+          mkdir -p audits/weekly-audits
+          cp reports/report.md "audits/weekly-audits/weekly-audit-${STAMP}.md"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audits/weekly-audits
+          if git diff --cached --quiet; then
+            echo "No report changes — nothing to commit."
+            exit 0
+          fi
+          git commit -m "weekly-audit: weekly report $(date -u +%F) [skip ci]"
+          # daily-audit (and its own previous run) may commit in the same
+          # second — rebase onto it and retry the push a few times.
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin main || true
+            if git push; then
+              echo "Pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "Push rejected (attempt $attempt) — remote moved, retrying"
+            sleep 5
+          done
+          exit 1
+
       # The job NEVER fails on findings — every check runs, every status is
       # reported here and in the run summary; the details live in the artifact.
       - name: Report all findings (job stays green)

@@ -23,8 +23,13 @@ Tools that aren't installed locally are skipped gracefully; CI installs everythi
 
 ## Reports
 
-Weekly-audit reports are **CI artifacts only** (90-day retention) — nothing under `reports/` is
-committed to this repo. Each run's artifact bundle contains:
+Both pipelines commit their sanitized Markdown reports to this repo; raw scan outputs are
+**CI artifacts only** (90-day retention), since they may contain secret **snippets**.
+
+- `audits/daily-audits/ts-audit-<date>T<h-mm-ss>.md` — one archive per daily-audit run
+- `audits/weekly-audits/weekly-audit-<date>T<h-mm-ss>.md` — one archive per weekly-audit run
+
+Each run's artifact bundle additionally contains:
 
 - `report.md` — latest sanitized report (stable name inside the artifact)
 - `<YYYY-MM-DD>-audit-report.md` — dated copy for that run
@@ -34,8 +39,9 @@ committed to this repo. Each run's artifact bundle contains:
 ## CI
 
 `.github/workflows/weekly-audit.yml` runs weekly (Monday 06:00 UTC), on every push, and on demand (`workflow_dispatch`).
-All report output (sanitized Markdown + full JSON) is uploaded as a 90-day artifact; nothing is
-committed back to the repo.
+Full JSON output is uploaded as a 90-day artifact; the sanitized Markdown report is committed to
+`audits/weekly-audits/` (same naming convention as the daily archives). The job stays green and
+reports every per-check status in its run summary.
 
 Daily TypeScript audits run separately via `daily-audit.yml` — their reports **are** committed
 (`audits/daily-audits/`) because they contain rule IDs and counts only, never source snippets.
