@@ -8,7 +8,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write # needed to push the updated report.md back to main
 
 jobs:
   audit:
