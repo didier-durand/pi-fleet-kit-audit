@@ -4,7 +4,7 @@
  * Runs ESLint (typescript-eslint strictTypeChecked + security + regexp +
  * sonarjs) over every TypeScript file under <target>/extensions/, produces
  * the Markdown report via the json-to-md ESLint formatter, writes it to
- * docs/audits/ (canonical latest + timestamped archive per run), emits a
+ * audits/ (canonical latest + timestamped archive per run), emits a
  * GitHub job summary when running in Actions, and splices a summary
  * section into README.md between markers.
  *
@@ -34,7 +34,7 @@ const HOME_ROOT = path.resolve(import.meta.dirname, "../..");
 const TARGET_ROOT = process.env.AUDIT_ROOT ? path.resolve(process.env.AUDIT_ROOT) : HOME_ROOT;
 const CONFIG = path.join(import.meta.dirname, "eslint.config.mjs");
 const FORMATTER = path.join(import.meta.dirname, "formatters", "json-to-md.mjs");
-const REPORT_DIR = path.join(HOME_ROOT, "docs", "audits");
+const REPORT_DIR = path.join(HOME_ROOT, "audits");
 // One timestamped archive per run (date AND time AND seconds, UTC) is the
 // only report artifact — no duplicate "latest" copy.
 const README = path.join(HOME_ROOT, "README.md");

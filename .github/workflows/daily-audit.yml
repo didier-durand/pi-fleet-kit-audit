@@ -51,7 +51,7 @@ jobs:
           # `git diff` cannot). Staged diff empty → genuinely nothing changed.
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md docs/audits
+          git add README.md audits
           if git diff --cached --quiet; then
             echo "No report changes since last run — nothing to commit."
             exit 0

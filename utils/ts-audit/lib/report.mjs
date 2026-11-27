@@ -144,7 +144,7 @@ export function ruleTotalsTable(scopes, heading) {
  * one metrics section per scope (functional code / tests), each with its
  * own columns, then a second table — totals per rule, split by scope and
  * ordered by functional frequency. No per-finding tables (the full report
- * stays in docs/audits/).
+ * stays in audits/).
  *
  * @param scopes {{functional: Array, tests: Array}} from splitByScope()
  * @param meta {{generatedAt: string, commit: string, eslintVersion: string}}
@@ -165,7 +165,7 @@ export function toJobSummary(scopes, meta) {
 	const totals = ruleTotalsTable(scopes, "###");
 	if (totals) lines.push(...totals, "");
 	else lines.push("_No rule totals — nothing to report._", "");
-	lines.push("Archives: `docs/audits/` — one Markdown report per run (name = date + hh-mm-ss).");
+	lines.push("Archives: `audits/` — one Markdown report per run (name = date + hh-mm-ss).");
 	return lines.join("\n");
 }
 
