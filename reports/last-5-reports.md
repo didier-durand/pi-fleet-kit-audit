@@ -1,10 +1,10 @@
 # Last 5 audit reports — pi-fleet-kit
 
-Latest run: 2026-11-27 18:09 UTC @ `4b5e92d` — [latest report](2026-11-27-audit-report.md)
+Latest run: 2026-11-27 18:15 UTC @ `57cd242` — [latest report](2026-11-27-audit-report.md)
 
 | Date | Commit | Secrets | SAST | ESLint | Deps | Hygiene | Report |
 |---|---|---|---|---|---|---|---|
-| 2026-11-27 | `4b5e92d` | WARN | PASS | FAIL | WARN | FAIL | [2026-11-27](2026-11-27-audit-report.md) |
+| 2026-11-27 | `57cd242` | WARN | PASS | FAIL | WARN | FAIL | [2026-11-27](2026-11-27-audit-report.md) |
 
 ## Current status
 
