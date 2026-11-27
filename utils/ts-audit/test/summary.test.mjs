@@ -52,27 +52,35 @@ test("json-to-md formatter: default export is the bare format fn (ESLint contrac
 	assert.equal(defaultFormat, jsonToMd, "default and named export are the same function");
 });
 
-test("toJobSummary: one section per scope with its own table and top rules", () => {
+test("toJobSummary: metrics sections per scope + rule-totals table ordered by functional frequency", () => {
 	const s = toJobSummary(RESULTS, META);
 	assert.match(s, /## TypeScript audit — security & efficiency/);
 	assert.match(s, /### Functional code/);
 	assert.match(s, /### Tests/);
-	assert.match(s, /\| Errors \| 1 \|/); // functional table
-	assert.match(s, /\| Warnings \| 1 \|/); // tests table
-	assert.match(s, /\*\*Top rules — functional code\*\*/);
-	assert.match(s, /- `r-a`: 1/);
-	assert.match(s, /- `r-b`: 1/);
+	assert.match(s, /\| Errors \| 1 \|/); // functional metrics table
+	assert.match(s, /\| Warnings \| 1 \|/); // tests metrics table
+
+	// second table: totals per rule, split by scope, ordered by functional desc
+	assert.match(s, /### Totals per rule/);
+	assert.match(s, /\| Rule \| Functional code \| Tests \|/);
+	assert.match(s, /\| `r-a` \| 1 \| 0 \|/);
+	assert.match(s, /\| `r-b` \| 0 \| 1 \|/);
+	const iA = s.indexOf("| `r-a` |");
+	const iB = s.indexOf("| `r-b` |");
+	assert.ok(iA !== -1 && iB !== -1 && iA < iB, "functional frequency leads the ranking");
+
 	assert.doesNotMatch(s, /## Findings/);
 	assert.match(s, /docs\/audits\//);
 	assert.doesNotMatch(s, /ts-audit\.md/, "no canonical-latest file — archives only");
 });
 
-test("toJobSummary: clean scopes show explicit no-findings lines", () => {
+test("toJobSummary: clean scopes show explicit no-findings lines and no totals table", () => {
 	const s = toJobSummary(
 		{ functional: [{ filePath: "/repo/a.ts", messages: [] }], tests: [] },
 		META,
 	);
 	const sections = s.split("### ").slice(1);
-	assert.equal(sections.length, 2, "two scope sections");
+	assert.equal(sections.length, 2, "two scope sections, no totals section");
 	for (const section of sections) assert.match(section, /No findings/);
+	assert.match(s, /No rule totals/);
 });

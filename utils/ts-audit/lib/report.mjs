@@ -109,9 +109,38 @@ function findingsSection(results, label, root) {
 }
 
 /**
+ * Rule-frequency totals across both scopes, as one table with a column per
+ * scope. Ordered by FUNCTIONAL-code frequency descending (tie-break: tests
+ * frequency, then rule name) — the functional signal leads the ranking.
+ */
+function ruleTotalsTable(scopes) {
+	const counts = new Map(); // rule → { functional, tests }
+	for (const { key, label } of SCOPES) {
+		for (const { rule, count } of summarize(scopes[key]).rules) {
+			const entry = counts.get(rule) ?? { functional: 0, tests: 0 };
+			entry[key] = count;
+			counts.set(rule, entry);
+		}
+	}
+	if (counts.size === 0) return null;
+	const sorted = [...counts.entries()]
+		.map(([rule, c]) => ({ rule, ...c }))
+		.sort((a, b) => b.functional - a.functional || b.tests - a.tests || a.rule.localeCompare(b.rule));
+	return [
+		"### Totals per rule",
+		"",
+		"| Rule | Functional code | Tests |",
+		"|---|---|---|",
+		...sorted.map(({ rule, functional, tests }) => `| \`${rule}\` | ${functional} | ${tests} |`),
+	];
+}
+
+/**
  * Compact variant for the GitHub job summary ($GITHUB_STEP_SUMMARY):
- * one section per scope (functional code / tests), each with its own
- * columns — no per-finding tables (the full report stays in docs/audits/).
+ * one metrics section per scope (functional code / tests), each with its
+ * own columns, then a second table — totals per rule, split by scope and
+ * ordered by functional frequency. No per-finding tables (the full report
+ * stays in docs/audits/).
  *
  * @param scopes {{functional: Array, tests: Array}} from splitByScope()
  * @param meta {{generatedAt: string, commit: string, eslintVersion: string}}
@@ -128,8 +157,10 @@ export function toJobSummary(scopes, meta) {
 		const { s, rows } = scopeSummaryTable(scopes[key]);
 		lines.push(`### ${label}`, "", ...rows, "");
 		if (s.errors === 0 && s.warnings === 0) lines.push("✅ **No findings.**", "");
-		lines.push(`**Top rules — ${label.toLowerCase()}**`, "", topRulesList(s), "");
 	}
+	const totals = ruleTotalsTable(scopes);
+	if (totals) lines.push(...totals, "");
+	else lines.push("_No rule totals — nothing to report._", "");
 	lines.push("Archives: `docs/audits/` — one Markdown report per run (name = date + hh-mm-ss).");
 	return lines.join("\n");
 }
