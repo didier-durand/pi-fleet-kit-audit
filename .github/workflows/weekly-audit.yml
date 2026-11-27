@@ -30,6 +30,8 @@ jobs:
         continue-on-error: true
         run: ./scripts/audit.sh https://github.com/didier-durand/pi-fleet-kit.git reports
 
+      # Reports are artifact-only (90-day retention) — nothing is committed
+      # to the repo; the sanitized report.md is inside the artifact bundle.
       - name: Upload report artifacts
         uses: actions/upload-artifact@v4
         if: always()
@@ -37,16 +39,6 @@ jobs:
           name: audit-report
           path: reports/
           retention-days: 90
-
-      - name: Commit sanitized report (raw JSONs are gitignored — artifacts only)
-        if: github.event_name != 'schedule'
-        run: |
-          git config user.name "audit-bot"
-          git config user.email "durand.didier@gmail.com"
-          git add reports/ # .gitignore keeps raw JSONs (secret snippets) out; commits report.md, dated reports, last-5-reports.md
-          git diff --cached --quiet || git commit -m "chore: update audit report"
-          git pull --rebase --autostash -q origin main || true
-          git push
 
       - name: Fail job if audit found issues
         if: steps.audit.outcome == 'failure'
