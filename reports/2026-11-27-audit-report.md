@@ -1,6 +1,6 @@
 # Audit report — pi-fleet-kit @ 3a855cd
 
-Generated: 2026-11-27 17:41 UTC by [pi-fleet-kit-audit](https://github.com/didier-durand/pi-fleet-kit-audit)
+Generated: 2026-11-27 17:43 UTC by [pi-fleet-kit-audit](https://github.com/didier-durand/pi-fleet-kit-audit)
 
 | Check | Tool | Status | Summary |
 |---|---|---|---|
@@ -15,7 +15,7 @@ Generated: 2026-11-27 17:41 UTC by [pi-fleet-kit-audit](https://github.com/didie
 - **committed env files:** ./.env — verify they hold no real secrets and add .env to .gitignore
 - `.gitignore` missing pattern: `.env`
 - TODO/FIXME/HACK markers in code: 0
-- files >1MB: ./extensions/pi-obs/tests/fixtures/data/traces.json.gz ./warp/AI-agent-fleet-Icon-rounded.png ./warp/AI-agent-fleet-Icon.png 
+- files >1MB: ./warp/AI-agent-fleet-Icon-rounded.png ./warp/AI-agent-fleet-Icon.png ./extensions/pi-obs/tests/fixtures/data/traces.json.gz 
 
 ## ESLint security findings
 
@@ -96,6 +96,6 @@ Generated: 2026-11-27 17:41 UTC by [pi-fleet-kit-audit](https://github.com/didie
 ## Dependency audit
 
 - [.](<.>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
+- [./extensions/prompt-trigger](<./extensions/prompt-trigger>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
 - [./extensions/git-status](<./extensions/git-status>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
 - [./extensions/pi-obs](<./extensions/pi-obs>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
-- [./extensions/prompt-trigger](<./extensions/prompt-trigger>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
