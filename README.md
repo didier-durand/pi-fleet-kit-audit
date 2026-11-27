@@ -50,8 +50,8 @@ so it never depends on a developer machine.
 
 - Tooling (with its own tests): [`utils/ts-audit/`](utils/ts-audit/) — reports are produced by a
   first-party ESLint formatter named `json-to-md` (no npm package by that name exists; verified).
-- `docs/audits/ts-audit.md` — latest report (stable path); `docs/audits/ts-audit-<date>T<h-mm-ss>.md` (seconds included — two runs can never collide) —
-  one archive per run. Note this is separate from the `reports/` scheme above.
+- `docs/audits/ts-audit-<date>T<h-mm-ss>.md` — one Markdown archive per run (seconds included —
+  two runs can never collide). Note this is separate from the `reports/` scheme above.
 - A live summary is spliced between markers in this README; committed by `github-actions[bot]`
   only when content changes. Lint findings never fail the job — the tables carry the status.
 
@@ -60,5 +60,5 @@ so it never depends on a developer machine.
 
 Errors 118 · Warnings 62 · Files scanned 18 · Rules triggered 30
 
-Full report: [docs/audits/ts-audit.md](docs/audits/ts-audit.md) — refreshed daily at 05:00 by the `ts-audit` workflow.
+Archives: [docs/audits/](docs/audits/) — one file per run (name = date + hh-mm-ss), refreshed daily at 05:00 by the `ts-audit` workflow.
 <!-- ts-audit:end -->

@@ -35,9 +35,8 @@ const TARGET_ROOT = process.env.AUDIT_ROOT ? path.resolve(process.env.AUDIT_ROOT
 const CONFIG = path.join(import.meta.dirname, "eslint.config.mjs");
 const FORMATTER = path.join(import.meta.dirname, "formatters", "json-to-md.mjs");
 const REPORT_DIR = path.join(HOME_ROOT, "docs", "audits");
-// Canonical "latest" file the README links to (stable name) — alongside a
-// timestamped archive per run (date AND time, UTC, sortable).
-const REPORT = path.join(REPORT_DIR, "ts-audit.md");
+// One timestamped archive per run (date AND time AND seconds, UTC) is the
+// only report artifact — no duplicate "latest" copy.
 const README = path.join(HOME_ROOT, "README.md");
 
 // CI passes the exact commit being audited; local runs fall back to the
@@ -95,7 +94,6 @@ async function main() {
 	fs.mkdirSync(REPORT_DIR, { recursive: true });
 	const archive = path.join(REPORT_DIR, `ts-audit-${archiveStamp(meta.generatedAt)}.md`);
 	fs.writeFileSync(archive, md, "utf8");
-	fs.writeFileSync(REPORT, md, "utf8");
 
 	const readme = fs.readFileSync(README, "utf8");
 	const summary = [
@@ -109,7 +107,7 @@ async function main() {
 			.replaceAll("  ", " ")
 			.trim(),
 		"",
-		`Full report: [docs/audits/ts-audit.md](docs/audits/ts-audit.md) — refreshed daily at 05:00 by the \`ts-audit\` workflow.`,
+		`Archives: [docs/audits/](docs/audits/) — one file per run (name = date + hh-mm-ss), refreshed daily at 05:00 by the \`ts-audit\` workflow.`,
 	].join("\n");
 
 	const updated = spliceAuditSection(readme, summary);
@@ -127,7 +125,7 @@ async function main() {
 	const s = summarize(results);
 	console.log(`Audit complete: ${s.errors} errors, ${s.warnings} warnings across ${s.files} files.`);
 	console.log(
-		`Report: ${path.relative(HOME_ROOT, REPORT)} · archive: ${path.relative(HOME_ROOT, archive)}` +
+		`Archive: ${path.relative(HOME_ROOT, archive)}` +
 			(updated !== readme ? " · README section updated" : " · README unchanged"),
 	);
 }

@@ -49,7 +49,8 @@ test("toJobSummary: compact — has tables, no per-file findings", () => {
 	assert.match(s, /\| Errors \| 1 \|/);
 	assert.match(s, /- `r-a`: 1/);
 	assert.doesNotMatch(s, /## Findings/);
-	assert.match(s, /docs\/audits\/ts-audit\.md/);
+	assert.match(s, /docs\/audits\//);
+	assert.doesNotMatch(s, /ts-audit\.md/, "no canonical-latest file — archives only");
 });
 
 test("toJobSummary: clean state shows explicit no-findings line", () => {

@@ -84,7 +84,7 @@ export function toJobSummary(results, meta) {
 	];
 	if (s.errors === 0 && s.warnings === 0) lines.push("✅ **No findings.**", "");
 	lines.push("## Top rules", "", topRules, "");
-	lines.push("Full report: `docs/audits/ts-audit.md` (latest) · timestamped archives alongside.");
+	lines.push("Archives: `docs/audits/` — one Markdown report per run (name = date + hh-mm-ss).");
 	return lines.join("\n");
 }
 
