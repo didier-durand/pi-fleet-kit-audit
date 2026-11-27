@@ -75,9 +75,9 @@ test("toJobSummary: metrics sections per scope + rule-totals table ordered by fu
 });
 
 test("toReadmeSection: status line with date, emoji, archive link; Summary + Totals tables", () => {
-	const s = toReadmeSection(RESULTS, META, "audits/ts-audit-2026-11-27T09-41-52.md");
+	const s = toReadmeSection(RESULTS, META, "audits/daily-audits/ts-audit-2026-11-27T09-41-52.md");
 	assert.match(s, /^## TypeScript audit/);
-	assert.match(s, /📅 \*\*Status as of 2026-11-27 09:41 UTC\*\* · commit `abc1234` · 📄 \[full report\]\(audits\/ts-audit-2026-11-27T09-41-52\.md\)/);
+	assert.match(s, /📅 \*\*Status as of 2026-11-27 09:41 UTC\*\* · commit `abc1234` · 📄 \[full report\]\(audits\/daily-audits\/ts-audit-2026-11-27T09-41-52\.md\)/);
 	assert.match(s, /### Summary/);
 	assert.match(s, /\| Scope \| Errors \| Warnings \| Files scanned \| Files with findings \| Rules triggered \|/);
 	assert.match(s, /\| Functional code \| 1 \| 0 \|/);

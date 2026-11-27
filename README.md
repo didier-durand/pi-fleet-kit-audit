@@ -38,7 +38,7 @@ All report output (sanitized Markdown + full JSON) is uploaded as a 90-day artif
 committed back to the repo.
 
 Daily TypeScript audits run separately via `daily-audit.yml` — their reports **are** committed
-(`audits/`) because they contain rule IDs and counts only, never source snippets.
+(`audits/daily-audits/`) because they contain rule IDs and counts only, never source snippets.
 
 > ⚠️ The report is published in a public repo. Findings (rule IDs, file paths) are fine;
 > any actual secret values are redacted by gitleaks and must never be committed manually.
@@ -54,7 +54,7 @@ so it never depends on a developer machine.
 
 - Tooling (with its own tests): [`utils/ts-audit/`](utils/ts-audit/) — reports are produced by a
   first-party ESLint formatter named `json-to-md` (no npm package by that name exists; verified).
-- `audits/ts-audit-<date>T<h-mm-ss>.md` — one Markdown archive per run (seconds included —
+- `audits/daily-audits/ts-audit-<date>T<h-mm-ss>.md` — one Markdown archive per run (seconds included —
   two runs can never collide). Note this is separate from the `reports/` scheme above.
 - A live summary is spliced between markers in this README; committed by `github-actions[bot]`
   only when content changes. Lint findings never fail the job — the tables carry the status.
@@ -62,7 +62,7 @@ so it never depends on a developer machine.
 <!-- ts-audit:start -->
 ## TypeScript audit
 
-📅 **Status as of 2026-11-27 18:42 UTC** · commit `0a67fa4734cb7f52887bfa4257f35a6549deb4a5` · 📄 [full report](audits/ts-audit-2026-11-27T18-42-10.md)
+📅 **Status as of 2026-11-27 18:43 UTC** · commit `3a855cd` · 📄 [full report](audits/daily-audits/ts-audit-2026-11-27T18-43-05.md)
 
 ### Summary
 

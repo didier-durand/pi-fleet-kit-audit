@@ -165,7 +165,7 @@ export function toJobSummary(scopes, meta) {
 	const totals = ruleTotalsTable(scopes, "###");
 	if (totals) lines.push(...totals, "");
 	else lines.push("_No rule totals — nothing to report._", "");
-	lines.push("Archives: `audits/` — one Markdown report per run (name = date + hh-mm-ss).");
+	lines.push("Archives: `audits/daily-audits/` — one Markdown report per run (name = date + hh-mm-ss).");
 	return lines.join("\n");
 }
 

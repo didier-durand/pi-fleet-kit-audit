@@ -34,7 +34,7 @@ const HOME_ROOT = path.resolve(import.meta.dirname, "../..");
 const TARGET_ROOT = process.env.AUDIT_ROOT ? path.resolve(process.env.AUDIT_ROOT) : HOME_ROOT;
 const CONFIG = path.join(import.meta.dirname, "eslint.config.mjs");
 const FORMATTER = path.join(import.meta.dirname, "formatters", "json-to-md.mjs");
-const REPORT_DIR = path.join(HOME_ROOT, "audits");
+const REPORT_DIR = path.join(HOME_ROOT, "audits", "daily-audits");
 // One timestamped archive per run (date AND time AND seconds, UTC) is the
 // only report artifact — no duplicate "latest" copy.
 const README = path.join(HOME_ROOT, "README.md");
