@@ -26,6 +26,8 @@ jobs:
           pipx install semgrep
 
       - name: Run audit
+        id: audit
+        continue-on-error: true
         run: ./scripts/audit.sh https://github.com/didier-durand/pi-fleet-kit.git reports
 
       - name: Upload report artifacts
@@ -44,3 +46,9 @@ jobs:
           git add reports/report.md
           git diff --cached --quiet || git commit -m "chore: update audit report"
           git push
+
+      - name: Fail job if audit found issues
+        if: steps.audit.outcome == 'failure'
+        run: |
+          echo "Audit reported FAIL on at least one check — see report artifact / committed report.md"
+          exit 1
