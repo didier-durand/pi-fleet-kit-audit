@@ -24,6 +24,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { ESLint } from "eslint";
 
+import { archiveStamp } from "./lib/archive-stamp.mjs";
 import { summarize, toJobSummary } from "./lib/report.mjs";
 import { spliceAuditSection } from "./lib/readme.mjs";
 
@@ -38,11 +39,6 @@ const REPORT_DIR = path.join(HOME_ROOT, "docs", "audits");
 // timestamped archive per run (date AND time, UTC, sortable).
 const REPORT = path.join(REPORT_DIR, "ts-audit.md");
 const README = path.join(HOME_ROOT, "README.md");
-
-// "2026-11-27T09:41:52.123Z" → "2026-11-27T09-41" (filename-safe)
-function archiveStamp(iso) {
-	return iso.slice(0, 16).replaceAll(":", "-");
-}
 
 // CI passes the exact commit being audited; local runs fall back to the
 // target checkout's HEAD.
