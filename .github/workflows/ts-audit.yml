@@ -1,0 +1,62 @@
+name: ts-audit
+
+on:
+  schedule:
+    # 05:00 CET (UTC+1). GitHub cron is UTC-only, so this fires at 06:00
+    # during CEST (DST) — accepted drift, documented here.
+    - cron: "0 4 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ts-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      # This repo: the audit tooling, reports, and README that get updated.
+      - uses: actions/checkout@v4
+
+      # The audited tree, cloned fresh on every run:
+      - name: Checkout pi-fleet-kit (audit target)
+        id: fleet
+        uses: actions/checkout@v4
+        with:
+          repository: didier-durand/pi-fleet-kit
+          path: pi-fleet-kit
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # Lockfile is committed in this repo → reproducible npm ci.
+      - name: Install audit tooling
+        working-directory: utils/ts-audit
+        run: npm ci --no-fund --no-audit
+
+      - name: Run audit
+        working-directory: utils/ts-audit
+        run: node audit.mjs
+        env:
+          AUDIT_ROOT: ${{ github.workspace }}/pi-fleet-kit
+          GIT_SHA: ${{ steps.fleet.outputs.commit }}
+
+      # NOTE: plain `git diff` cannot see untracked files — the timestamped
+      # archive is brand-new every run, so diff on TRACKED content only for
+      # the short-circuit, then `git add` the whole audits dir to capture
+      # the new archive.
+      - name: Commit report if changed
+        run: |
+          if git diff --quiet README.md docs/audits/ts-audit.md; then
+            echo "No report changes since last run — nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md docs/audits
+          git commit -m "ts-audit: daily report $(date -u +%F) [skip ci]"
+          git push

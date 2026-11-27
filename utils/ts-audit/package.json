@@ -1,0 +1,19 @@
+{
+  "name": "ts-audit",
+  "private": true,
+  "type": "module",
+  "description": "Daily TypeScript quality audit (security & efficiency) for the fleet's extensions; writes docs/audits/ts-audit.md and a README summary section.",
+  "scripts": {
+    "audit": "node audit.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.11",
+    "eslint": "^10.15.0",
+    "eslint-plugin-regexp": "^3.3.3",
+    "eslint-plugin-security": "^4.2.1",
+    "eslint-plugin-sonarjs": "^4.2.3",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.74.0"
+  }
+}

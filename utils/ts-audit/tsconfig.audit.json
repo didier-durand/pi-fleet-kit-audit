@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"target": "es2023",
+		"lib": ["es2023"],
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		// Extensions are loaded by pi via node --experimental-strip-types, so
+		// they import sibling files with explicit .ts extensions:
+		"allowImportingTsExtensions": true,
+		"noEmit": true,
+		"strict": true,
+		"noUncheckedIndexedAccess": true,
+		"types": ["node"]
+	},
+	"include": ["shims.d.ts", "../../extensions/**/*.ts"]
+}

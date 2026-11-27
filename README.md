@@ -38,3 +38,27 @@ are committed back on push runs.
 
 > ⚠️ The report is published in a public repo. Findings (rule IDs, file paths) are fine;
 > any actual secret values are redacted by gitleaks and must never be committed manually.
+
+## TypeScript audit (ts-audit)
+
+`.github/workflows/ts-audit.yml` runs **daily at 05:00 CET** (06:00 during DST — GitHub cron is
+UTC-only) and on demand. Unlike `audit.yml` (weekly, secrets/SAST/deps/hygiene), `ts-audit` is a
+deep, type-aware **TypeScript quality audit** (security + efficiency) of pi-fleet-kit's extensions:
+typescript-eslint strict type-checked, `eslint-plugin-security`, `eslint-plugin-regexp` (ReDoS),
+`eslint-plugin-sonarjs`. The job clones the pi-fleet-kit tree fresh on every run (`AUDIT_ROOT`),
+so it never depends on a developer machine.
+
+- Tooling (with its own tests): [`utils/ts-audit/`](utils/ts-audit/) — reports are produced by a
+  first-party ESLint formatter named `json-to-md` (no npm package by that name exists; verified).
+- `docs/audits/ts-audit.md` — latest report (stable path); `docs/audits/ts-audit-<date>T<time>.md` —
+  one archive per run. Note this is separate from the `reports/` scheme above.
+- A live summary is spliced between markers in this README; committed by `github-actions[bot]`
+  only when content changes. Lint findings never fail the job — the tables carry the status.
+
+<!-- ts-audit:start -->
+## TypeScript audit
+
+Errors 118 · Warnings 62 · Files scanned 18 · Rules triggered 30
+
+Full report: [docs/audits/ts-audit.md](docs/audits/ts-audit.md) — refreshed daily at 05:00 by the `ts-audit` workflow.
+<!-- ts-audit:end -->

@@ -5,3 +5,6 @@ reports/*
 !reports/last-5-reports.md
 
 node_modules/
+
+# ts-audit: per-run generated tsconfig (target-specific include paths)
+utils/ts-audit/tsconfig.audit.generated.json
