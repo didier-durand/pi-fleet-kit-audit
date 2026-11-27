@@ -58,7 +58,70 @@ so it never depends on a developer machine.
 <!-- ts-audit:start -->
 ## TypeScript audit
 
+📅 **Status as of 2026-11-27 18:24 UTC** · commit `3a855cd` · 📄 [full report](docs/audits/ts-audit-2026-11-27T18-24-38.md)
 
+### Summary
 
-Archives: [docs/audits/](docs/audits/) — one file per run (name = date + hh-mm-ss), refreshed daily at 05:00 by the `ts-audit` workflow.
+| Scope | Errors | Warnings | Files scanned | Files with findings | Rules triggered |
+|---|---|---|---|---|---|
+| Functional code | 118 | 62 | 18 | 14 | 30 |
+| Tests | 607 | 232 | 24 | 23 | 39 |
+
+### Totals per rule
+
+| Rule | Functional code | Tests |
+|---|---|---|
+| `security/detect-non-literal-fs-filename` | 41 | 199 |
+| `@typescript-eslint/no-confusing-void-expression` | 40 | 16 |
+| `security/detect-object-injection` | 14 | 27 |
+| `@typescript-eslint/require-await` | 11 | 4 |
+| `sonarjs/cognitive-complexity` | 10 | 0 |
+| `@typescript-eslint/no-unnecessary-condition` | 6 | 26 |
+| `@typescript-eslint/no-unused-vars` | 6 | 17 |
+| `sonarjs/no-dead-store` | 5 | 5 |
+| `regexp/no-unused-capturing-group` | 5 | 0 |
+| `sonarjs/super-linear-regex` | 4 | 3 |
+| `@typescript-eslint/no-base-to-string` | 4 | 2 |
+| `regexp/prefer-w` | 4 | 0 |
+| `security/detect-possible-timing-attacks` | 4 | 0 |
+| `sonarjs/no-alphabetical-sort` | 3 | 19 |
+| `sonarjs/no-unused-vars` | 3 | 5 |
+| `security/detect-unsafe-regex` | 3 | 1 |
+| `@typescript-eslint/no-unnecessary-type-conversion` | 2 | 2 |
+| `sonarjs/different-types-comparison` | 2 | 2 |
+| `sonarjs/use-type-alias` | 2 | 0 |
+| `@typescript-eslint/no-unnecessary-type-assertion` | 1 | 92 |
+| `sonarjs/unused-import` | 1 | 7 |
+| `regexp/no-dupe-characters-character-class` | 1 | 0 |
+| `regexp/use-ignore-case` | 1 | 0 |
+| `sonarjs/duplicates-in-character-class` | 1 | 0 |
+| `sonarjs/function-return-type` | 1 | 0 |
+| `sonarjs/max-switch-cases` | 1 | 0 |
+| `sonarjs/no-all-duplicated-branches` | 1 | 0 |
+| `sonarjs/no-nested-conditional` | 1 | 0 |
+| `sonarjs/no-redundant-jump` | 1 | 0 |
+| `sonarjs/regex-complexity` | 1 | 0 |
+| `@typescript-eslint/no-floating-promises` | 0 | 275 |
+| `@typescript-eslint/restrict-template-expressions` | 0 | 41 |
+| `sonarjs/no-clear-text-protocols` | 0 | 23 |
+| `sonarjs/no-incomplete-assertions` | 0 | 13 |
+| `@typescript-eslint/no-non-null-assertion` | 0 | 12 |
+| `@typescript-eslint/await-thenable` | 0 | 10 |
+| `@typescript-eslint/no-dynamic-delete` | 0 | 6 |
+| `sonarjs/publicly-writable-directories` | 0 | 6 |
+| `security/detect-non-literal-regexp` | 0 | 5 |
+| `sonarjs/constructor-for-side-effects` | 0 | 5 |
+| `sonarjs/assertions-in-tests` | 0 | 3 |
+| `sonarjs/no-trivial-assertions` | 0 | 2 |
+| `@typescript-eslint/no-meaningless-void-operator` | 0 | 1 |
+| `@typescript-eslint/only-throw-error` | 0 | 1 |
+| `regexp/no-super-linear-backtracking` | 0 | 1 |
+| `regexp/optimal-quantifier-concatenation` | 0 | 1 |
+| `sonarjs/no-duplicate-test-title` | 0 | 1 |
+| `sonarjs/no-nested-functions` | 0 | 1 |
+| `sonarjs/no-nested-template-literals` | 0 | 1 |
+| `sonarjs/no-os-command-from-path` | 0 | 1 |
+| `sonarjs/no-unused-collection` | 0 | 1 |
+| `sonarjs/pseudo-random` | 0 | 1 |
+| `sonarjs/void-use` | 0 | 1 |
 <!-- ts-audit:end -->

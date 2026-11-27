@@ -25,7 +25,7 @@ import path from "node:path";
 import { ESLint } from "eslint";
 
 import { archiveStamp } from "./lib/archive-stamp.mjs";
-import { splitByScope, summarize, toJobSummary, toMarkdownScopes } from "./lib/report.mjs";
+import { splitByScope, summarize, toJobSummary, toMarkdownScopes, toReadmeSection } from "./lib/report.mjs";
 import { spliceAuditSection } from "./lib/readme.mjs";
 
 const HOME_ROOT = path.resolve(import.meta.dirname, "../..");
@@ -101,19 +101,7 @@ async function main() {
 	fs.writeFileSync(archive, md, "utf8");
 
 	const readme = fs.readFileSync(README, "utf8");
-	const summary = [
-		"## TypeScript audit",
-		"",
-		md
-			.split("\n")
-			.filter((l) => l.startsWith("| Errors |") || l.startsWith("| Warnings |") || l.startsWith("| Files scanned |") || l.startsWith("| Rules triggered |"))
-			.join(" · ")
-			.replaceAll("|", "")
-			.replaceAll("  ", " ")
-			.trim(),
-		"",
-		`Archives: [docs/audits/](docs/audits/) — one file per run (name = date + hh-mm-ss), refreshed daily at 05:00 by the \`ts-audit\` workflow.`,
-	].join("\n");
+	const summary = toReadmeSection(scopes, meta, path.relative(HOME_ROOT, archive));
 
 	const updated = spliceAuditSection(readme, summary);
 	if (updated !== readme) fs.writeFileSync(README, updated, "utf8");

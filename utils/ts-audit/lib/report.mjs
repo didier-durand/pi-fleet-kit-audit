@@ -170,6 +170,33 @@ export function toJobSummary(scopes, meta) {
 }
 
 /**
+ * Live README section: status line (emoji + date + link to the run's full
+ * report archive), then the Summary and Totals per rule tables — the same
+ * data as the job summary, in a more compact shape.
+ *
+ * @param scopes {{functional: Array, tests: Array}} from splitByScope()
+ * @param meta {{generatedAt: string, commit: string, eslintVersion: string}}
+ * @param archiveRel {string} repo-relative path of this run's archive
+ * @returns {string} Markdown between the ts-audit markers
+ */
+export function toReadmeSection(scopes, meta, archiveRel) {
+	const statusDate = `${meta.generatedAt.slice(0, 16).replace("T", " ")} UTC`;
+	const lines = [
+		"## TypeScript audit",
+		"",
+		`📅 **Status as of ${statusDate}** · commit \`${meta.commit}\` · 📄 [full report](${archiveRel})`,
+		"",
+		"### Summary",
+		"",
+		...scopeSummaryTableCombined(scopes),
+		"",
+	];
+	const totals = ruleTotalsTable(scopes, "###");
+	if (totals) lines.push(...totals, "");
+	return lines.join("\n");
+}
+
+/**
  * Full report covering BOTH scopes: combined summary table (one row per
  * scope), then per-scope findings and top rules.
  *
@@ -177,6 +204,22 @@ export function toJobSummary(scopes, meta) {
  * @param meta {{generatedAt: string, commit: string, eslintVersion: string, root: string}}
  * @returns {string} full Markdown report
  */
+/**
+ * Combined Summary table (one row per scope) — shared by the full report
+ * and the README section.
+ */
+function scopeSummaryTableCombined(scopes) {
+	const rows = [
+		"| Scope | Errors | Warnings | Files scanned | Files with findings | Rules triggered |",
+		"|---|---|---|---|---|---|",
+	];
+	for (const { key, label } of SCOPES) {
+		const { s } = scopeSummaryTable(scopes[key]);
+		rows.push(`| ${label} | ${s.errors} | ${s.warnings} | ${s.files} | ${s.filesWithFindings} | ${s.rules.length} |`);
+	}
+	return rows;
+}
+
 export function toMarkdownScopes(scopes, meta) {
 	const parts = [
 		"# TypeScript audit — security & efficiency",
@@ -188,13 +231,8 @@ export function toMarkdownScopes(scopes, meta) {
 		"",
 		"## Summary",
 		"",
-		"| Scope | Errors | Warnings | Files scanned | Files with findings | Rules triggered |",
-		"|---|---|---|---|---|---|",
+		...scopeSummaryTableCombined(scopes),
 	];
-	for (const { key, label } of SCOPES) {
-		const { s } = scopeSummaryTable(scopes[key]);
-		parts.push(`| ${label} | ${s.errors} | ${s.warnings} | ${s.files} | ${s.filesWithFindings} | ${s.rules.length} |`);
-	}
 	// Rule totals lead the findings sections — same table as the job summary.
 	const totals = ruleTotalsTable(scopes, "##");
 	if (totals) parts.push(...totals, "");

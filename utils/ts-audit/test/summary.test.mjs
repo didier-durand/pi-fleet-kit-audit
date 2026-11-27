@@ -5,7 +5,7 @@ import test from "node:test";
 // default; the named export is the same function for ergonomic imports.
 import { format as jsonToMd } from "../formatters/json-to-md.mjs";
 import defaultFormat from "../formatters/json-to-md.mjs";
-import { toJobSummary } from "../lib/report.mjs";
+import { toJobSummary, toReadmeSection } from "../lib/report.mjs";
 
 const META = {
 	generatedAt: "2026-11-27T09:41:52.123Z",
@@ -72,6 +72,21 @@ test("toJobSummary: metrics sections per scope + rule-totals table ordered by fu
 	assert.doesNotMatch(s, /## Findings/);
 	assert.match(s, /docs\/audits\//);
 	assert.doesNotMatch(s, /ts-audit\.md/, "no canonical-latest file — archives only");
+});
+
+test("toReadmeSection: status line with date, emoji, archive link; Summary + Totals tables", () => {
+	const s = toReadmeSection(RESULTS, META, "docs/audits/ts-audit-2026-11-27T09-41-52.md");
+	assert.match(s, /^## TypeScript audit/);
+	assert.match(s, /📅 \*\*Status as of 2026-11-27 09:41 UTC\*\* · commit `abc1234` · 📄 \[full report\]\(docs\/audits\/ts-audit-2026-11-27T09-41-52\.md\)/);
+	assert.match(s, /### Summary/);
+	assert.match(s, /\| Scope \| Errors \| Warnings \| Files scanned \| Files with findings \| Rules triggered \|/);
+	assert.match(s, /\| Functional code \| 1 \| 0 \|/);
+	assert.match(s, /\| Tests \| 0 \| 1 \|/);
+	assert.match(s, /### Totals per rule/);
+	const iA = s.indexOf("| `r-a` |");
+	const iB = s.indexOf("| `r-b` |");
+	assert.ok(iA !== -1 && iB !== -1 && iA < iB, "functional frequency leads the ranking");
+	assert.doesNotMatch(s, /Findings —/, "README stays compact: no per-file findings");
 });
 
 test("toJobSummary: clean scopes show explicit no-findings lines and no totals table", () => {
