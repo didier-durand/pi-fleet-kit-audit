@@ -27,7 +27,8 @@ Both pipelines commit their sanitized Markdown reports to this repo; raw scan ou
 **CI artifacts only** (90-day retention), since they may contain secret **snippets**.
 
 - `audits/daily-audits/ts-audit-<date>T<h-mm-ss>.md` — one archive per daily-audit run
-- `audits/weekly-audits/weekly-audit-<date>T<h-mm-ss>.md` — one archive per weekly-audit run
+- `audits/weekly-audits/weekly-audit-<date>T<h-mm-ss>.md` — one archive per weekly-audit run;
+  each run prunes archives older than **3 months** (retention is encoded in the filenames)
 
 Each run's artifact bundle additionally contains:
 

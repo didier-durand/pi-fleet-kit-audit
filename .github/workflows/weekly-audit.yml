@@ -54,9 +54,23 @@ jobs:
           STAMP=$(date -u +%Y-%m-%dT%H-%M-%S)
           mkdir -p audits/weekly-audits
           cp reports/report.md "audits/weekly-audits/weekly-audit-${STAMP}.md"
+          # Retention: keep archives from the last 3 months only. The date is
+          # embedded in the filename — file mtimes are useless here (a fresh
+          # CI checkout stamps every file with the checkout time).
+          CUTOFF=$(date -u -d "3 months ago" +%Y-%m-%d)
+          PRUNED=0
+          for f in audits/weekly-audits/weekly-audit-*.md; do
+            [ -e "$f" ] || continue
+            D=$(basename "$f" | sed -E 's/^weekly-audit-([0-9]{4}-[0-9]{2}-[0-9]{2})T.*/\1/')
+            if [[ "$D" < "$CUTOFF" ]]; then
+              rm -f "$f"
+              PRUNED=$((PRUNED + 1))
+            fi
+          done
+          [ "$PRUNED" -gt 0 ] && echo "Pruned $PRUNED archive(s) older than $CUTOFF"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add audits/weekly-audits
+          git add -A audits/weekly-audits
           if git diff --cached --quiet; then
             echo "No report changes — nothing to commit."
             exit 0
