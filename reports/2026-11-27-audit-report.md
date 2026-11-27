@@ -1,11 +1,11 @@
 # Audit report — pi-fleet-kit @ 19ed98f
 
-Generated: 2026-11-27 09:27 UTC by [pi-fleet-kit-audit](https://github.com/didier-durand/pi-fleet-kit-audit)
+Generated: 2026-11-27 09:28 UTC by [pi-fleet-kit-audit](https://github.com/didier-durand/pi-fleet-kit-audit)
 
 | Check | Tool | Status | Summary |
 |---|---|---|---|
 | Secrets | gitleaks | ⚠️ WARN | 5 finding(s), all in test fixtures (likely fake data) — details in artifacts only |
-| SAST | semgrep | ⏭️ SKIPPED | semgrep not installed |
+| SAST | semgrep | ✅ PASS | no semgrep findings |
 | SAST (rules) | eslint-plugin-security | ❌ FAIL | 62 finding(s) in source code (+232 in tests) — see eslint-summary.md |
 | Dependencies | npm audit | ⚠️ WARN | 4 of 4 package dir(s) lack a committed lockfile — see npm-audit.md |
 | Hygiene | script | ❌ FAIL | see hygiene.md below |
@@ -96,6 +96,6 @@ Generated: 2026-11-27 09:27 UTC by [pi-fleet-kit-audit](https://github.com/didie
 ## Dependency audit
 
 - [.](<.>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
-- [./extensions/prompt-trigger](<./extensions/prompt-trigger>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
 - [./extensions/git-status](<./extensions/git-status>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
 - [./extensions/pi-obs](<./extensions/pi-obs>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
+- [./extensions/prompt-trigger](<./extensions/prompt-trigger>) — WARNING: no package-lock.json committed; dependency versions unpinned, audit impossible (generate lockfile and commit it)
