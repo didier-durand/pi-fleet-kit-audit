@@ -45,6 +45,7 @@ jobs:
           git config user.email "durand.didier@gmail.com"
           git add reports/report.md
           git diff --cached --quiet || git commit -m "chore: update audit report"
+          git pull --rebase --autostash -q origin main || true
           git push
 
       - name: Fail job if audit found issues
