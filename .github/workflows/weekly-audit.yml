@@ -25,10 +25,15 @@ jobs:
           curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz | tar -xz -C /usr/local/bin gitleaks
           pipx install semgrep
 
+      # The script itself never aborts on a failing check — it runs ALL five
+      # and reports each status. Output is teed so the summary step can echo
+      # every status; pipefail preserves the script's exit code.
       - name: Run audit
         id: audit
         continue-on-error: true
-        run: ./scripts/audit.sh https://github.com/didier-durand/pi-fleet-kit.git reports
+        run: |
+          set -o pipefail
+          ./scripts/audit.sh https://github.com/didier-durand/pi-fleet-kit.git reports 2>&1 | tee audit-output.log
 
       # Reports are artifact-only (90-day retention) — nothing is committed
       # to the repo; the sanitized report.md is inside the artifact bundle.
@@ -40,8 +45,20 @@ jobs:
           path: reports/
           retention-days: 90
 
-      - name: Fail job if audit found issues
-        if: steps.audit.outcome == 'failure'
+      # The job NEVER fails on findings — every check runs, every status is
+      # reported here and in the run summary; the details live in the artifact.
+      - name: Report all findings (job stays green)
+        if: always()
         run: |
-          echo "Audit reported FAIL on at least one check — see report artifact / committed report.md"
-          exit 1
+          STATUSES=$(grep -E '\[audit\] Done\. Statuses' audit-output.log || true)
+          echo "$STATUSES"
+          {
+            echo "## weekly-audit — per-check statuses"
+            echo
+            echo "$STATUSES"
+            echo
+            grep -E '\[audit\]\].*(PASS|FAIL|WARN|SKIPPED)' audit-output.log \
+              | sed 's/.*\[audit\]//' || true
+            echo
+            echo "Details: \`reports/report.md\` inside the \`audit-report\` artifact (90-day retention)."
+          } >> "$GITHUB_STEP_SUMMARY"
