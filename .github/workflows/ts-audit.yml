@@ -45,21 +45,27 @@ jobs:
           AUDIT_ROOT: ${{ github.workspace }}/pi-fleet-kit
           GIT_SHA: ${{ steps.fleet.outputs.commit }}
 
-      # NOTE: plain `git diff` cannot see untracked files — the timestamped
-      # archive is brand-new every run, so diff on TRACKED content only for
-      # the short-circuit, then `git add` the whole audits dir to capture
-      # the new archive.
       - name: Commit report if changed
         run: |
-          if git diff --quiet README.md docs/audits/ts-audit.md; then
-            echo "No report changes since last run — nothing to commit."
-            exit 0
-          fi
+          # Stage first: the guard must see untracked NEW archives too (a plain
+          # `git diff` cannot). Staged diff empty → genuinely nothing changed.
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add README.md docs/audits
-          git diff --cached --quiet || git commit -m "ts-audit: daily report $(date -u +%F) [skip ci]"
-          # Another workflow (audit.yml on push) may have committed in between —
-          # same race its own push step guards against: rebase, then push.
-          git pull --rebase --autostash -q origin main || true
-          git push
+          if git diff --cached --quiet; then
+            echo "No report changes since last run — nothing to commit."
+            exit 0
+          fi
+          git commit -m "ts-audit: daily report $(date -u +%F) [skip ci]"
+          # Another workflow (audit.yml on push) may commit in the same second —
+          # rebase onto it and retry the push a few times before giving up.
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin main || true
+            if git push; then
+              echo "Pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "Push rejected (attempt $attempt) — remote moved, retrying"
+            sleep 5
+          done
+          exit 1
