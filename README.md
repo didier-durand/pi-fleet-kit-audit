@@ -70,14 +70,14 @@ so it never depends on a developer machine.
 <!-- ts-audit:start -->
 ## TypeScript audit
 
-📅 **Status as of 2026-11-27 18:58 UTC** · commit `ce809afd48df2d1193c2487dd571ca67fdc79135` · 📄 [full report](audits/daily-audits/ts-audit-2026-11-27T18-58-18.md)
+📅 **Status as of 2026-11-28 12:30 UTC** · commit `8c4190bfcc5da626e39a84496025a6594879af5d` · 📄 [full report](audits/daily-audits/ts-audit-2026-11-28T12-30-12.md)
 
 ### Summary
 
 | Scope | Errors | Warnings | Files scanned | Files with findings | Rules triggered |
 |---|---|---|---|---|---|
-| Functional code | 118 | 62 | 18 | 14 | 30 |
-| Tests | 607 | 232 | 24 | 23 | 39 |
+| Functional code | 119 | 62 | 18 | 14 | 30 |
+| Tests | 618 | 232 | 24 | 23 | 39 |
 
 ### Totals per rule
 
@@ -89,18 +89,19 @@ so it never depends on a developer machine.
 | `@typescript-eslint/require-await` | 11 | 4 |
 | `sonarjs/cognitive-complexity` | 10 | 0 |
 | `@typescript-eslint/no-unnecessary-condition` | 6 | 26 |
-| `@typescript-eslint/no-unused-vars` | 6 | 17 |
-| `sonarjs/no-dead-store` | 5 | 5 |
+| `@typescript-eslint/no-unused-vars` | 6 | 18 |
+| `sonarjs/no-dead-store` | 5 | 6 |
 | `regexp/no-unused-capturing-group` | 5 | 0 |
 | `sonarjs/super-linear-regex` | 4 | 3 |
 | `@typescript-eslint/no-base-to-string` | 4 | 2 |
 | `regexp/prefer-w` | 4 | 0 |
 | `security/detect-possible-timing-attacks` | 4 | 0 |
 | `sonarjs/no-alphabetical-sort` | 3 | 19 |
-| `sonarjs/no-unused-vars` | 3 | 5 |
+| `sonarjs/no-unused-vars` | 3 | 6 |
 | `security/detect-unsafe-regex` | 3 | 1 |
 | `@typescript-eslint/no-unnecessary-type-conversion` | 2 | 2 |
 | `sonarjs/different-types-comparison` | 2 | 2 |
+| `sonarjs/no-nested-conditional` | 2 | 0 |
 | `sonarjs/use-type-alias` | 2 | 0 |
 | `@typescript-eslint/no-unnecessary-type-assertion` | 1 | 92 |
 | `sonarjs/unused-import` | 1 | 7 |
@@ -110,10 +111,9 @@ so it never depends on a developer machine.
 | `sonarjs/function-return-type` | 1 | 0 |
 | `sonarjs/max-switch-cases` | 1 | 0 |
 | `sonarjs/no-all-duplicated-branches` | 1 | 0 |
-| `sonarjs/no-nested-conditional` | 1 | 0 |
 | `sonarjs/no-redundant-jump` | 1 | 0 |
 | `sonarjs/regex-complexity` | 1 | 0 |
-| `@typescript-eslint/no-floating-promises` | 0 | 275 |
+| `@typescript-eslint/no-floating-promises` | 0 | 281 |
 | `@typescript-eslint/restrict-template-expressions` | 0 | 41 |
 | `sonarjs/no-clear-text-protocols` | 0 | 23 |
 | `sonarjs/no-incomplete-assertions` | 0 | 13 |
@@ -123,10 +123,10 @@ so it never depends on a developer machine.
 | `sonarjs/publicly-writable-directories` | 0 | 6 |
 | `security/detect-non-literal-regexp` | 0 | 5 |
 | `sonarjs/constructor-for-side-effects` | 0 | 5 |
+| `@typescript-eslint/only-throw-error` | 0 | 3 |
 | `sonarjs/assertions-in-tests` | 0 | 3 |
 | `sonarjs/no-trivial-assertions` | 0 | 2 |
 | `@typescript-eslint/no-meaningless-void-operator` | 0 | 1 |
-| `@typescript-eslint/only-throw-error` | 0 | 1 |
 | `regexp/no-super-linear-backtracking` | 0 | 1 |
 | `regexp/optimal-quantifier-concatenation` | 0 | 1 |
 | `sonarjs/no-duplicate-test-title` | 0 | 1 |
